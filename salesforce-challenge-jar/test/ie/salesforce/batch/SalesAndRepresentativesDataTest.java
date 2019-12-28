@@ -1,0 +1,102 @@
+package ie.salesforce.batch;
+
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.Position;
+import ie.salesforce.data.Representative;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+public class SalesAndRepresentativesDataTest {
+
+	SalesAndRepresentativesData salesAndRepresentativesData;
+
+	@Before
+	public void before() {
+		salesAndRepresentativesData = new SalesAndRepresentativesData();
+	}
+
+	@Test
+	public void testLoadData() {
+		//setup
+		String output = "";
+		
+		//test
+		salesAndRepresentativesData.loadData();
+
+		for (Customer cust : salesAndRepresentativesData.getCustomerList()) {
+			output = output + cust.toString() + "\n";
+		}
+		for (Representative rep : salesAndRepresentativesData.getRepresentativeList()) {
+			output = output + rep.toString() + "\n";
+		}
+		
+		// verify
+		System.out.println(output);
+		Assert.assertTrue("Data should have mentioned Mullins Janae", output.contains("Mullins Janae"));
+		Assert.assertTrue("Data should have mentioned PNC FINANCIAL SERVICES GROUP", output.contains("PNC FINANCIAL SERVICES GROUP"));
+		Assert.assertTrue("Data should have mentioned rep11@salesforce.com", output.contains("rep11@salesforce.com"));
+		Assert.assertTrue("Data should have mentioned rep16@salesforce.com", output.contains("rep16@salesforce.com"));
+	}
+	
+	@Test
+	public void testCalculateDistance() throws Exception {
+		//setup
+		// Dublin
+		Position pos1 = new Position(53.3498, 6.2603);
+		// Cork
+		Position pos2 = new Position(51.8985, 8.4756);
+
+		//test
+		double dubCorkDist = salesAndRepresentativesData.calculateDistance(pos1, pos2);
+
+		//verify
+		Assert.assertTrue("Distance from Dublin to Cork should be around 220 km", 
+				Math.abs(dubCorkDist-220) < 2);
+	}
+
+	@Test
+	public void testBuildOutputString() {
+		//setup
+		Map<Representative, Customer> list = new HashMap<>();
+		Customer c = new Customer();
+		c.setName("John Jones");
+		c.setAddress("123 Fake St");
+		c.setCity("Capitol City");
+		c.setState("New York");
+		c.setContactName("Jane Contact");
+		c.setContactEmail("jane.contact@gmail.com");
+		c.setContactPhone("01 4552 1928");
+		Representative r = new Representative();
+		r.setName("Bill Bloggs");
+		r.setEmail("bill.bloggs@gmail.com");
+		r.setPhone("01 1236 8474");
+		list.put(r, c);
+		
+		//test
+		String testOutput = salesAndRepresentativesData.buildOutputString(list);
+		
+		//verify
+		Assert.assertTrue("Test Output should have matched", testOutput.equals(
+				"The representative Bill Bloggs, bill.bloggs@gmail.com, 01 1236 8474 has to visit "
+				+ "John Jones at 123 Fake St, Capitol City, New York and talk to "
+				+ "Jane Contact, jane.contact@gmail.com, 01 4552 1928"));
+	}
+		
+	@Test
+	public void testGenerateData() {
+		//setup
+		String allOutput = "";
+		
+		//test
+		allOutput = salesAndRepresentativesData.generateOutput();
+		
+		//verify
+		Assert.assertTrue("Output should have matched", allOutput.contains("The representative Rep 24, rep24@salesforce.com, 00000024 has to visit WESCO INTERNATIONAL at 225 WEST STATION SQUARE DRIVE, PITTSBURGH, PA and talk to Eakes Vicki, VickiCEakes@rhyta.com, (03) 5360 8128"));
+		Assert.assertTrue("Output should have matched", allOutput.contains("The representative Rep 27, rep27@salesforce.com, 00000027 has to visit STEEL DYNAMICS at 7575 WEST JEFFERSON BOULEVARD, FORT WAYNE, IN and talk to Bryant Daniel, DanielSBryant@jourrapide.com, (07) 4598 9953"));
+	}
+}
