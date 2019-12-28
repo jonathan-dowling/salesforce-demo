@@ -1,0 +1,75 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:security="http://www.springframework.org/schema/security"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/security
+                           http://www.springframework.org/schema/security/spring-security.xsd
+                           http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:component-scan base-package="lu.scoteqint.extract.bloomberg"/>
+	<context:component-scan base-package="lu.scoteqint.extract.anonymisation"/>
+    <context:component-scan base-package="lu.scoteqint.extract.claimsreport"/>
+    <context:component-scan base-package="lu.scoteqint.extract.actuarial"/>
+    <context:component-scan base-package="lu.scoteqint.extract.nonguaranteedamc"/>
+	
+	<!-- Configurer that replaces ${...} place holders with values from a properties file -->
+	<bean id="propertyConfigurer"
+	      class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer"
+	      p:location="classpath:extract-service.properties" />
+
+	<!-- DEBUG settings for development only -->
+	<!-- <security:debug /> -->
+	
+	<security:global-method-security pre-post-annotations="enabled" />
+	
+	<security:http pattern="/loggedout.html" security="none" />
+
+	<security:http use-expressions="true" >
+    
+        <security:csrf disabled="true"/>
+            
+		<security:intercept-url pattern="/secure/assetinfo/**" access="hasAnyAuthority(${assetinfo.role})" />
+		<security:intercept-url pattern="/secure/experian/**" access="hasAnyAuthority(${experian.role})" />
+		<security:intercept-url pattern="/secure/fatca/**" access="hasAnyAuthority(${fatca.role})" />
+		<security:intercept-url pattern="/secure/crs/**" access="hasAnyAuthority(${fatca.role})" />
+		<security:intercept-url pattern="/secure/annuitypayments/**" access="hasAnyAuthority(${annuitypayments.role})" />
+		<security:intercept-url pattern="/secure/mergeclient/**" access="hasAnyAuthority(${mergeclient.role})" />
+		<security:intercept-url pattern="/secure/sanctions/**" access="hasAnyAuthority(${group.sanctions.role})" />
+		<security:intercept-url pattern="/secure/bloomberg/**" access="hasAnyAuthority(${bloomberg.request.role})" />
+		<security:intercept-url pattern="/secure/anonymisation/**" access="hasAnyAuthority(${mass.anonymisation.role})" />
+        <security:intercept-url pattern="/secure/actuarialextract/**" access="hasAnyAuthority(${actuarial.extract.role})"/>
+		
+		<!-- Allow all other requests. -->
+		<security:intercept-url pattern="/**" access="permitAll" />
+		<security:form-login />
+		<security:logout logout-success-url="/loggedout.html" delete-cookies="JSESSIONID" />
+
+		<!-- Uncomment to enable X509 client authentication support --> 
+		<!-- <x509 /> -->
+
+		<!-- Uncomment to limit the number of sessions a user can have -->
+		<security:session-management invalid-session-url="/timeout.html">
+			<security:concurrency-control max-sessions="1" />
+		</security:session-management>
+	</security:http>
+	
+	<security:authentication-manager alias="authenticationProvider">
+		<security:authentication-provider ref="ldapActiveDirectoryAuthProvider" />
+	</security:authentication-manager>
+	
+	<bean id="ldapActiveDirectoryAuthProvider"
+	      class="org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider">
+		<constructor-arg value="${ldap.domain}" />
+		<constructor-arg value="${ldap.url}" />
+		<constructor-arg value="${ldap.ou}" />
+		<property name="convertSubErrorCodesToExceptions" value="true" />
+	</bean>
+
+<!--     <security:authentication-manager alias="authenticationProvider" /> -->
+
+</beans>

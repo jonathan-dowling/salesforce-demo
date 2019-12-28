@@ -1,0 +1,18 @@
+textarea.bonds {
+    font-family: "Lucida Console", "Lucida Sans Typewriter", monaco, monospace;
+    width: 300px;
+    height: 150px;
+    padding: 5px 6px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    resize: none;
+}
+
+.error {
+	color: #cc0000;
+	font-size: 0.85em;
+}
+
+.success {
+	font-size: 0.85em;
+}

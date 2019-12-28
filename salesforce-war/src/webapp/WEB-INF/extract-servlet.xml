@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<mvc:annotation-driven/>
+	<context:component-scan base-package="lu.scoteqint.extract.web"/>
+	<mvc:resources mapping="/images/**" location="/WEB-INF/resources/images/" />
+	<mvc:resources mapping="/css/**" location="/WEB-INF/resources/css/" />
+	
+	<mvc:view-controller path="/" view-name="index" />
+
+   	<mvc:view-controller path="/secure/annuitypayments/extract/" view-name="/secure/annuitypayments/annuitypaymentsextract"/>
+   	<mvc:view-controller path="/secure/annuitypayments/process/" view-name="/secure/annuitypayments/processannuitypayments"/>
+   	<mvc:view-controller path="/secure/experian/" view-name="/secure/experian/experianExtractFile"/>
+   	<mvc:view-controller path="/secure/marketdata/" view-name="/secure/marketdata/marketdata"/>
+   	<mvc:view-controller path="/secure/morningstar/" view-name="/secure/morningstar/morningstarfundupdate"/>
+   	<mvc:view-controller path="/secure/bloomberg/createbloombergrequest/" view-name="/secure/bloomberg/createbloombergrequest"/>
+   	<mvc:view-controller path="/secure/bloomberg/validationforexpectedpricedate/" view-name="/secure/bloomberg/validationforexpectedpricedate"/>
+   	<mvc:view-controller path="/secure/bloomberg/createbloomberggethistoryrequest/" view-name="/secure/bloomberg/createbloomberggethistoryrequest"/>
+    <mvc:view-controller path="/secure/actuarialextract/runextract/" view-name="/secure/actuarialextract/runextract"/>
+
+
+
+    <!-- Hierarchy of handlers -->
+    <bean class="org.springframework.web.servlet.mvc.annotation.DefaultAnnotationHandlerMapping" />
+
+    <bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+        <property name="order" value="0" />
+    </bean>
+
+    <!-- Transfers all the html requests to proper jsp. -->
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+ 	 	<property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
+ 		<property name="prefix" value="/WEB-INF/jsp/" />
+ 		<property name="suffix" value=".jsp" />
+ 	</bean>
+
+    <!-- Point any pages that are not picked up by the ExtractClientController at the equivalent jsp page. -->
+    <bean id="urlViewController" class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
+	<bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping">
+	    <property name="order" value="1" />
+	    <property name="mappings">
+		    <props>
+	            <prop key="/*.html">urlViewController</prop>
+		    </props>
+	    </property>
+	</bean>    
+        
+ </beans>
