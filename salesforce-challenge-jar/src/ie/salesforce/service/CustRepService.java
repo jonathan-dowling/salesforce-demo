@@ -1,11 +1,16 @@
 package ie.salesforce.service;
 
+import java.util.Map;
+
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.Representative;
+
 public interface CustRepService {
 
 	/**
 	 * Run the class that creates the customer and representative list.
-	 * @return the string output of the customers and reps
+	 * @return the output of the customers and reps
 	 */
-	String runSalesRepresentativesJob();
+	Map<Representative, Customer> runSalesRepresentativesJob();
 
 }

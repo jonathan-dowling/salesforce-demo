@@ -60,43 +60,23 @@ public class SalesAndRepresentativesDataTest {
 	}
 
 	@Test
-	public void testBuildOutputString() {
-		//setup
-		Map<Representative, Customer> list = new HashMap<>();
-		Customer c = new Customer();
-		c.setName("John Jones");
-		c.setAddress("123 Fake St");
-		c.setCity("Capitol City");
-		c.setState("New York");
-		c.setContactName("Jane Contact");
-		c.setContactEmail("jane.contact@gmail.com");
-		c.setContactPhone("01 4552 1928");
-		Representative r = new Representative();
-		r.setName("Bill Bloggs");
-		r.setEmail("bill.bloggs@gmail.com");
-		r.setPhone("01 1236 8474");
-		list.put(r, c);
-		
-		//test
-		String testOutput = salesAndRepresentativesData.buildOutputString(list);
-		
-		//verify
-		Assert.assertTrue("Test Output should have matched", testOutput.equals(
-				"The representative Bill Bloggs, bill.bloggs@gmail.com, 01 1236 8474 has to visit "
-				+ "John Jones at 123 Fake St, Capitol City, New York and talk to "
-				+ "Jane Contact, jane.contact@gmail.com, 01 4552 1928"));
-	}
-		
-	@Test
 	public void testGenerateData() {
 		//setup
-		String allOutput = "";
+		Map<Representative, Customer> allOutput = new HashMap<>();
 		
 		//test
 		allOutput = salesAndRepresentativesData.generateOutput();
 		
 		//verify
-		Assert.assertTrue("Output should have matched", allOutput.contains("The representative Rep 24, rep24@salesforce.com, 00000024 has to visit WESCO INTERNATIONAL at 225 WEST STATION SQUARE DRIVE, PITTSBURGH, PA and talk to Eakes Vicki, VickiCEakes@rhyta.com, (03) 5360 8128"));
-		Assert.assertTrue("Output should have matched", allOutput.contains("The representative Rep 27, rep27@salesforce.com, 00000027 has to visit STEEL DYNAMICS at 7575 WEST JEFFERSON BOULEVARD, FORT WAYNE, IN and talk to Bryant Daniel, DanielSBryant@jourrapide.com, (07) 4598 9953"));
+		for (Map.Entry<Representative, Customer> entry : allOutput.entrySet()) {
+			Representative rep = entry.getKey();
+			Customer cust = entry.getValue();
+			if (rep.getName().equals("Rep 6")) {
+				Assert.assertTrue("Rep 6 should have been paired with this customer", cust.getName().equals("ALBERTSONS COS."));
+			}
+			if (rep.getName().equals("Rep 27")) {
+				Assert.assertTrue("Rep 27 should have been paired with this customer", cust.getName().equals("STEEL DYNAMICS"));
+			}
+		}
 	}
 }

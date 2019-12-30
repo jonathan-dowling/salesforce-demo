@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="SalesAndRepresentativesDataTest" project="salesforce-challenge" tests="4" started="4" failures="0" errors="0" ignored="0">
+  <testsuite name="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.037">
+    <testcase name="testLoadData" classname="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.004"/>
+    <testcase name="testGenerateData" classname="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.02"/>
+    <testcase name="testBuildOutputString" classname="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.0"/>
+    <testcase name="testCalculateDistance" classname="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.013"/>
+  </testsuite>
+</testrun>

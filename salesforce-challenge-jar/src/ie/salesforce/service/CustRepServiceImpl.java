@@ -1,20 +1,25 @@
 package ie.salesforce.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Map;
+
 import org.springframework.stereotype.Service;
 
 import ie.salesforce.batch.SalesAndRepresentativesData;
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.Representative;
 
+/**
+ * The service layer for the Rest controller
+ */
 @Service
 public class CustRepServiceImpl implements CustRepService {
 
-	@Autowired
-	//public Job custReprDataJobBean;
 	public SalesAndRepresentativesData generator;
 	
 	@Override
-	public String runSalesRepresentativesJob() {
-		String message = generator.generateOutput();
+	public Map<Representative, Customer> runSalesRepresentativesJob() {
+		generator = new SalesAndRepresentativesData();
+		Map<Representative, Customer> message = generator.generateOutput();
 		return message;
 	}
 

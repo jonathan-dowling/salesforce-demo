@@ -1,0 +1,5 @@
+package ie.salesforce.data;
+
+public class Contact {
+
+}

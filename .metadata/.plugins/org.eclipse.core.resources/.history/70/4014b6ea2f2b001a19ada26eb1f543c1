@@ -1,0 +1,33 @@
+package ie.salesforce.web.controller;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.ModelAndView;
+
+import ie.salesforce.service.CustRepService;
+
+@RestController
+public class CustRepController {
+	
+	@Autowired
+	private CustRepService custReprService;
+
+	// The Rest interface is specified in the value here
+	@RequestMapping(value = "/secure/salesforce/saleslist", method = RequestMethod.POST)
+	public ModelAndView returnCustomerAndRepresentativeList(Model model)
+	{
+		// Run the main job and get the reps and customers back as a message
+//		String message = custReprService.runSalesRepresentativesJob();
+		String message = "Nothing";
+		model.addAttribute("title", "List of Customers and Representatives");
+		// Add the message to the model
+		model.addAttribute("message", message);
+		// Pass the model into the ModelAndView and output to custrepoutput.jsp
+        return new ModelAndView("/secure/salesforce/custrepoutput", "model", model);
+    }
+
+}
+

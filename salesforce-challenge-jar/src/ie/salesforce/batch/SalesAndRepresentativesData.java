@@ -1,9 +1,5 @@
 package ie.salesforce.batch;
 
-import ie.salesforce.data.Customer;
-import ie.salesforce.data.Position;
-import ie.salesforce.data.Representative;
-
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -11,16 +7,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import org.springframework.stereotype.Component;
 
-// The Component annotation allows this to be autowired into other classes
-@Component
+import ie.salesforce.data.Contact;
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.Position;
+import ie.salesforce.data.Representative;
+
 public class SalesAndRepresentativesData {
 	
 	protected String representativeListFilename = "src_resources/representatives.properties";
@@ -78,6 +75,8 @@ public class SalesAndRepresentativesData {
             	rep.setName((String) repObj.get("name"));
             	rep.setEmail((String) repObj.get("email"));
             	rep.setPhone((String) repObj.get("phone"));
+            	
+            	// Get the lat and long from the location string by splitting on the comma
             	String location = (String) repObj.get("location");
             	String[] locationArray = location.split(",");
 	            double lat = new Double(locationArray[0].trim()).doubleValue();
@@ -105,18 +104,26 @@ public class SalesAndRepresentativesData {
             	Customer cust = new Customer();
             	
             	cust.setName((String) repObj.get("NAME"));
-            	cust.setAddress((String) repObj.get("ADDRESS"));
+            	
+            	// Build one long address string
+            	StringBuilder address = new StringBuilder("");
+            	address.append((String) repObj.get("ADDRESS")).append(", ");
             	String address2 = (String) repObj.get("ADDRESS2");
-            	cust.setAddress2(address2.equals("NOT AVAILABLE") ? "" : address2);
-            	cust.setCity((String) repObj.get("CITY"));
-            	cust.setState((String) repObj.get("STATE"));
-            	cust.setZip((String) repObj.get("ZIP"));
+            	address.append(address2.equals("NOT AVAILABLE") ? "" : address2 + ", ");
+            	address.append((String) repObj.get("CITY")).append(", ");
+            	address.append((String) repObj.get("STATE")).append(", ");
+            	address.append((String) repObj.get("ZIP"));
+            	cust.setAddress(address.toString());
+            	
             	cust.setLatitude( ((Double) repObj.get("LATITUDE")).doubleValue());
             	cust.setLongitude( ((Double) repObj.get("LONGITUDE")).doubleValue());
+            	
                 JSONObject contact = (JSONObject) repObj.get("CONTACT");
-            	cust.setContactName((String) contact.get("NAME"));
-            	cust.setContactEmail((String) contact.get("EMAIL"));
-            	cust.setContactPhone((String) contact.get("PHONE"));
+                Contact con = new Contact();
+            	con.setName((String) contact.get("NAME"));
+            	con.setEmail((String) contact.get("EMAIL"));
+            	con.setPhone((String) contact.get("PHONE"));
+            	cust.setContact(con);
             	
             	customerList.add(cust);
             }
@@ -130,19 +137,15 @@ public class SalesAndRepresentativesData {
 	}
 
 	/**
-	 * Main method. Load data, do the matching, generate the output
-	 * @return all output as a string
+	 * Main method. Load data, do the matching
+	 * @return the matches
 	 */
-	public String generateOutput() {
+	public Map<Representative, Customer> generateOutput() {
 		loadData();
 
-		// Match customers and reps
 		custReps = matchRepsWithCusts();
 		
-		// Build the output string to display to the user
-		String allOutput = buildOutputString(custReps);
-		
-		return allOutput;
+		return custReps;
 	}
 
 	/**
@@ -175,28 +178,6 @@ public class SalesAndRepresentativesData {
 		return custReps;
 	}
 
-	/**
-	 * Generate all representative and customer matches as one string
-	 * @param custReps
-	 * @return the output string
-	 */
-	public String buildOutputString(Map<Representative, Customer> custReps) {
-		String allOutput = "";
-		for (Entry<Representative, Customer> entry : custReps.entrySet()) {
-			Representative rep = entry.getKey();
-			Customer cust = entry.getValue();
-			
-			String outputMsg = "The representative " + rep.getName() + ", " + rep.getEmail() + ", " + rep.getPhone() + 
-					" has to visit " + cust.getName() + " at " + cust.getAddress() + ", "
-					 + cust.getCity() + ", " + cust.getState() + " and talk to " + 
-					cust.getContactName() + ", " + cust.getContactEmail() + ", " + cust.getContactPhone();
-			allOutput = allOutput + outputMsg;
-			System.out.println(outputMsg);
-		}
-		
-		return allOutput;
-	}
-	
 	/**
 	 * Calculate the distance over the ground between two points expressed using lat/long
 	 * @param position 1

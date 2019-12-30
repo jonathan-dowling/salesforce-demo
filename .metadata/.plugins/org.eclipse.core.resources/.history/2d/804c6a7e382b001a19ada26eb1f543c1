@@ -1,0 +1,20 @@
+package ie.salesforce.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import ie.salesforce.batch.SalesAndRepresentativesData;
+
+@Service
+public class CustRepServiceImpl implements CustRepService {
+
+	public SalesAndRepresentativesData generator;
+	
+	@Override
+	public String runSalesRepresentativesJob() {
+		generator = new SalesAndRepresentativesData();
+		String message = generator.generateOutput();
+		return message;
+	}
+
+}

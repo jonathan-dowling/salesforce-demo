@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Copy package &apos;ie.salesforce.web.controller&apos; to &apos;salesforce-challenge/src&apos;&#x0D;&#x0A;- Original project: &apos;salesforce-challenge-war&apos;&#x0D;&#x0A;- Destination element: &apos;salesforce-challenge/src&apos;&#x0D;&#x0A;- Original element: &apos;salesforce-challenge-war/src/ie.salesforce.web.controller&apos;" description="Copy package" destination="=salesforce-challenge/src=/optional=/true=/=/maven.pomderived=/true=/" element1="/src&lt;ie.salesforce.web.controller" flags="589830" fragments="1" id="org.eclipse.jdt.ui.copy" policy="org.eclipse.jdt.ui.copyPackages" stamp="1577732070667" version="1.0"/>
+</session>

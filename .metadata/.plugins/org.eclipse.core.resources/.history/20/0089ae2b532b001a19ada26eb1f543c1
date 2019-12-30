@@ -1,0 +1,23 @@
+package ie.salesforce.service;
+
+import java.util.Map;
+
+import org.springframework.stereotype.Service;
+
+import ie.salesforce.batch.SalesAndRepresentativesData;
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.Representative;
+
+@Service
+public class CustRepServiceImpl implements CustRepService {
+
+	public SalesAndRepresentativesData generator;
+	
+	@Override
+	public Map<Representative, Customer> runSalesRepresentativesJob() {
+		generator = new SalesAndRepresentativesData();
+		Map<Representative, Customer> message = generator.generateOutput();
+		return message;
+	}
+
+}

@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><testrun name="SalesAndRepresentativesDataTest.testGenerateData" project="salesforce-challenge-jar" tests="1" started="1" failures="0" errors="0" ignored="0">
+  <testcase name="testGenerateData" classname="ie.salesforce.batch.SalesAndRepresentativesDataTest" time="0.0"/>
+</testrun>
