@@ -1,6 +1,8 @@
 This is a Mavenised Eclipse project, but you only need Maven installed, not Eclipse.
 The project is in git at :
 https://github.com/jonathan-dowling/salesforce-demo.git
+The language is Java.
+Note that since there are 30 representatives but only 15 customers, not all reps were assigned to anyone.
 
 1. Clone the project from github to a local folder
 2. Open command prompt
