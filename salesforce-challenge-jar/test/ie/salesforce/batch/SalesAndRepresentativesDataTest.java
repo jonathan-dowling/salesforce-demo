@@ -1,15 +1,18 @@
 package ie.salesforce.batch;
 
-import ie.salesforce.data.Customer;
-import ie.salesforce.data.Position;
-import ie.salesforce.data.Representative;
-
-import java.util.HashMap;
-import java.util.Map;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import ie.salesforce.data.Customer;
+import ie.salesforce.data.CustomerOutput;
+import ie.salesforce.data.OutputTuple;
+import ie.salesforce.data.Position;
+import ie.salesforce.data.Representative;
+import ie.salesforce.data.RepresentativeOutput;
 
 public class SalesAndRepresentativesDataTest {
 
@@ -62,15 +65,15 @@ public class SalesAndRepresentativesDataTest {
 	@Test
 	public void testGenerateData() {
 		//setup
-		Map<Representative, Customer> allOutput = new HashMap<>();
+		List<OutputTuple> allOutput = new ArrayList<>();
 		
 		//test
 		allOutput = salesAndRepresentativesData.generateOutput();
 		
 		//verify
-		for (Map.Entry<Representative, Customer> entry : allOutput.entrySet()) {
-			Representative rep = entry.getKey();
-			Customer cust = entry.getValue();
+		for (OutputTuple entry : allOutput) {
+			RepresentativeOutput rep = entry.getRepresentative();
+			CustomerOutput cust = entry.getCompany();
 			if (rep.getName().equals("Rep 6")) {
 				Assert.assertTrue("Rep 6 should have been paired with this customer", cust.getName().equals("ALBERTSONS COS."));
 			}

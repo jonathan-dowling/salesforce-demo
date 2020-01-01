@@ -1,0 +1,17 @@
+This is a Mavenised Eclipse project, but you only need Maven installed, not Eclipse.
+The project is in git at :
+https://github.com/jonathan-dowling/salesforce-demo.git
+
+1. Clone the project from github to a local folder
+2. Open command prompt
+3. Browse to the checkout folder and cd into salesforce-demo/salesforce-challenge-jar
+4. Run "mvn clean install"
+5. Scroll up and you will see "Running ie.salesforce.batch.SalesAndRepresentativesDataTest" and the test output
+6. Run "mvn spring-boot:run"
+7. After a minute or so the Tomcat server should start up and be running. 
+8. Browse to http://localhost:8080/salesforce/v1/saleslist
+9. The JSON output is seen.
+10.Now open the checkout folder in Windows explorer
+11.Browse to salesforce-demo\salesforce-challenge-jar\target\surefire-reports
+12.Open ie.salesforce.batch.SalesAndRepresentativesDataTest.txt
+13.This details the tests that were run and their outcome.

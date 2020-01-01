@@ -1,6 +1,7 @@
 package ie.salesforce.data;
 
 public class Position {
+	
 	private double latitude;
 	private double longitude;
 

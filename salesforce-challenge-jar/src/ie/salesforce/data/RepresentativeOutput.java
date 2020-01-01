@@ -1,11 +1,11 @@
 package ie.salesforce.data;
 
-public class Contact {
+public class RepresentativeOutput {
 	
-    private String name;
-    private String email;
-    private String phone;
-    
+	private String name;
+	private String email;
+	private String phone;
+	
 	public String getName() {
 		return name;
 	}
@@ -23,5 +23,8 @@ public class Contact {
 	}
 	public void setPhone(String phone) {
 		this.phone = phone;
+	}
+	public String toString() {
+		return getName() + ", " + getEmail() + ", " + getPhone();
 	}
 }

@@ -1,9 +1,8 @@
 package ie.salesforce.service;
 
-import java.util.Map;
+import java.util.List;
 
-import ie.salesforce.data.Customer;
-import ie.salesforce.data.Representative;
+import ie.salesforce.data.OutputTuple;
 
 public interface CustRepService {
 
@@ -11,6 +10,6 @@ public interface CustRepService {
 	 * Run the class that creates the customer and representative list.
 	 * @return the output of the customers and reps
 	 */
-	Map<Representative, Customer> runSalesRepresentativesJob();
+	List<OutputTuple> runSalesRepresentativesJob();
 
 }

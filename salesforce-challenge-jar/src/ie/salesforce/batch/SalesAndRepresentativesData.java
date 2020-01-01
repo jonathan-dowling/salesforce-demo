@@ -15,8 +15,11 @@ import org.json.simple.parser.ParseException;
 
 import ie.salesforce.data.Contact;
 import ie.salesforce.data.Customer;
+import ie.salesforce.data.CustomerOutput;
+import ie.salesforce.data.OutputTuple;
 import ie.salesforce.data.Position;
 import ie.salesforce.data.Representative;
+import ie.salesforce.data.RepresentativeOutput;
 
 public class SalesAndRepresentativesData {
 	
@@ -28,12 +31,12 @@ public class SalesAndRepresentativesData {
 
 	private List<Representative> representativeList;
 	
-	private Map<Representative, Customer> custReps;
+	private List<OutputTuple> custReps;
 
 	public SalesAndRepresentativesData() {
 		customerList = new ArrayList<>();
 		representativeList = new ArrayList<>();
-		custReps = new HashMap<>();
+		custReps = new ArrayList<>();
 	}
 
 	/**
@@ -140,7 +143,7 @@ public class SalesAndRepresentativesData {
 	 * Main method. Load data, do the matching
 	 * @return the matches
 	 */
-	public Map<Representative, Customer> generateOutput() {
+	public List<OutputTuple> generateOutput() {
 		loadData();
 
 		custReps = matchRepsWithCusts();
@@ -152,7 +155,7 @@ public class SalesAndRepresentativesData {
 	 * For each customer, check its distance to every rep and record the closest
 	 * @return map of reps and customers
 	 */
-	public Map<Representative, Customer> matchRepsWithCusts() {
+	public List<OutputTuple> matchRepsWithCusts() {
 		// Make a copy of the rep list so we can remove items from it later
 		List<Representative> repList = getRepresentativeList();
 		for (Customer cust : customerList) {
@@ -169,8 +172,10 @@ public class SalesAndRepresentativesData {
 					closestRep = rep;
 				}
 			}
-			// Record the customer and closest rep
-			custReps.put(closestRep, cust);
+			// Record the customer and closest rep. Cast to the basic class that excludes 
+			// position data as this isn't needed for JSON output
+			OutputTuple outputTuple = new OutputTuple(closestRep, cust);
+			custReps.add(outputTuple);
 			// Remove this rep from the list so it won't be chosen again
 			repList.remove(closestRep);
 		}
